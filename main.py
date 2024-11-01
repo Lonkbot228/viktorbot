@@ -2,20 +2,20 @@ import telebot
 from telebot.types import Message
 
 # Замените 'YOUR_BOT_TOKEN' на токен вашего бота
-bot = telebot.TeleBot('7926513353:AAEy1uQy-pDSJQJ_gKcQjzqAZTmngrlrIAA')
+bot = telebot.TeleBot('7926513353:AAGLYjNWhKBvwPMNMFNIqeGO5yjOmeUb_1M')
 
 # Контактные данные менеджера
 manager_contact = (
-    "**@TehnoViktor_Manager**"
+    "<b>@TehnoViktor_Manager</b>"
 )
 
-# Сообщение предупреждения
+# Сообщение предупреждения с использованием HTML
 warning_message = (
     "Здравствуйте 👋\n"
     "Спасибо за комментарий.\n\n"
     "Будьте осторожны, вам могут ответить мошенники.\n"
-    "**Мы не берем предоплату за товар!**\n\n"
-    "Наш менеджер: **@TehnoViktor_Manager**"
+    "<b>Мы не берем предоплату за товар!</b>\n\n"
+    "Наш менеджер: <b>@TehnoViktor_Manager</b>"
 )
 
 # Словарь для отслеживания, кому отправлено приветственное сообщение
@@ -34,7 +34,8 @@ def send_stats(message: Message):
             message.chat.id,
             (f"Статистика бота:\n"
              f"Отправлено сообщений: {statistics['messages_sent']}\n"
-             f"Забанено пользователей: {statistics['users_banned']}")
+             f"Забанено пользователей: {statistics['users_banned']}"),
+            parse_mode="HTML"
         )
 
 @bot.message_handler(func=lambda message: True)
@@ -44,16 +45,18 @@ def handle_message(message: Message):
 
     # Отправка приветственного сообщения при первом сообщении
     if user_id not in replied_users:
-        bot.reply_to(message, warning_message)
+        bot.reply_to(message, warning_message, parse_mode="HTML")
         replied_users.add(user_id)
         statistics['messages_sent'] += 1
     elif "контакт" in text or "можно купить" in text:
         bot.reply_to(
             message,
-            f"Здравствуйте, {message.from_user.first_name}, вот наши контактные данные:\n{manager_contact}"
+            f"Здравствуйте, {message.from_user.first_name}, вот наши контактные данные:\n{manager_contact}",
+            parse_mode="HTML"
         )
         statistics['messages_sent'] += 1
 
 # Запуск бота
 print("Бот запущен...")
 bot.polling()
+

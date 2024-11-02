@@ -1,8 +1,9 @@
 import telebot
+import os
 from telebot.types import Message
 
-# Замените 'YOUR_BOT_TOKEN' на токен вашего бота
-bot = telebot.TeleBot('7926513353:AAGLYjNWhKBvwPMNMFNIqeGO5yjOmeUb_1M')
+# Создайте переменную окружения TOKEN с токеном вашего бота
+bot = telebot.TeleBot(os.environ.get("TOKEN"))
 
 # Контактные данные менеджера
 manager_contact = (
@@ -59,4 +60,3 @@ def handle_message(message: Message):
 # Запуск бота
 print("Бот запущен...")
 bot.polling()
-

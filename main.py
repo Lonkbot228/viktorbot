@@ -39,7 +39,7 @@ def send_stats(message: Message):
             parse_mode="HTML"
         )
 
-@bot.message_handler(func=lambda message: True)
+@bot.message_handler(func=lambda message: message.chat.type in ["private", "group", "supergroup"])
 def handle_message(message: Message):
     user_id = message.from_user.id
     text = message.text.lower()

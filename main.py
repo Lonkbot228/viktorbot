@@ -10,13 +10,14 @@ manager_contact = (
     "<b>@TehnoViktor_Manager</b>"
 )
 
-# Сообщение предупреждения с использованием HTML
+# Сообщение приветствия с использованием HTML
 warning_message = (
-    "Здравствуйте 👋\n"
-    "Спасибо за комментарий.\n\n"
-    "Будьте осторожны, вам могут ответить мошенники.\n"
-    "<b>Мы не берем предоплату за товар!</b>\n\n"
-    "Наш менеджер: <b>@TehnoViktor_Manager</b>"
+    f"Здравствуйте, {message.from_user.first_name} 👋\n"
+    "Сейчас Вам ответим 👨‍💻\n\n"
+    "<u>ОСТОРОЖНО! Вам могут написать мошенники от нашего имени!</u>\n"
+    "<b>Мы не берем предоплату за товар, у нас все в наличии!</b>\n\n"
+    "Связь с нами: <b>@TehnoViktor_Manager</b>\n"
+    "+79495902364 - <b>Виктор</b>"
 )
 
 # Словарь для отслеживания, кому отправлено приветственное сообщение
@@ -39,14 +40,19 @@ def send_stats(message: Message):
             parse_mode="HTML"
         )
 
-@bot.message_handler(func=lambda message: message.chat.type in ["private", "group", "supergroup"])
+@bot.message_handler(func=lambda message: True)
 def handle_message(message: Message):
     user_id = message.from_user.id
     text = message.text.lower()
 
     # Отправка приветственного сообщения при первом сообщении
     if user_id not in replied_users:
-        bot.reply_to(message, warning_message, parse_mode="HTML")
+        # Получаем имя пользователя для подстановки в приветствие
+        bot.reply_to(
+            message,
+            warning_message.replace("$name$", message.from_user.first_name),
+            parse_mode="HTML"
+        )
         replied_users.add(user_id)
         statistics['messages_sent'] += 1
     elif "контакт" in text or "можно купить" in text:

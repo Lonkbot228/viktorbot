@@ -44,6 +44,10 @@ def send_stats(message: Message):
 def handle_message(message: Message):
     user_id = message.from_user.id
     text = message.text.lower()
+    
+    # Игнорировать сообщения от пользователей с ником "Group"
+    if message.from_user.username == "Group":
+        return
 
     # Отправка приветственного сообщения при первом сообщении
     if user_id not in replied_users:

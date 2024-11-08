@@ -29,19 +29,6 @@ statistics = {
     "users_banned": 0
 }
 
-# Business connection handling
-@bot.message_handler(func=lambda message: message.json.get("business_connection_id"))
-def handle_business_connection(message: Message):
-    if message.json.get("can_reply"):
-        business_connection_id = message.json.get("business_connection_id")
-        # Process messages in business chat
-        bot.send_message(
-            business_connection_id,
-            "Привет! Это бизнес-сообщение для управления чатом от имени владельца бизнеса.",
-            parse_mode="HTML"
-        )
-        statistics['messages_sent'] += 1
-
 @bot.message_handler(commands=['stats'])
 def send_stats(message: Message):
     if message.chat.type == "private" and message.from_user.username == "lonkigor":
